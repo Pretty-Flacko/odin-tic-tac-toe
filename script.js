@@ -33,13 +33,9 @@ const Player = (name, marker) => {
     const getName = () => playerName;
     const getMarker = () => playerMarker;
 
-    const makeMove = (index) => {
-        console.log(`${playerName} tries to mark cell ${index} with ${playerMarker}`);
-    };
-
     return {
         getName,
-        getMarker,
+        getMarker
     };
 };
 
@@ -48,24 +44,20 @@ const GameController = (function () {
     let players = [];
 
     const startGame = () => {
-        console.log("Game started!");
         players = [Player("Player 1", "X"), Player("Player 2", "0")];
         currentPlayer = players[0];
         Gameboard.reset();
     };
 
     const switchPlayer = () => {
-        console.log("Switching player...");
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
     };
 
     const playRound = (index) => {
-        console.log(`Player ${currentPlayer.getName()} plays at cell ${index}`);
         Gameboard.setCell(index, currentPlayer.getMarker());
     };
 
     const checkWinner = () => {
-        console.log("Checking winner...");
         const winningCombos = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],  // rows
             [0, 3, 6], [1, 4, 7], [2, 5, 8],  //columns
@@ -79,7 +71,6 @@ const GameController = (function () {
                 Gameboard.getCell(a) === Gameboard.getCell(b) &&
                 Gameboard.getCell(a) === Gameboard.getCell(c)
             ) {
-                console.log(`Player ${currentPlayer.getName()} wins!`);
                 return currentPlayer;
             }
         }
@@ -90,12 +81,8 @@ const GameController = (function () {
             }
             return true;
         })();
-        if (boardFull) {
-            console.log("It's a tie!");
-            return "tie";
-        }
-
-        return null;
+        
+        if (boardFull) return "tie";
     };
 
     const getCurrentPlayer = () => currentPlayer;
@@ -108,6 +95,8 @@ const GameController = (function () {
         getCurrentPlayer
     };
 })();
+
+GameController.startGame();
 
 const DisplayController = (function () {
     const cells = document.querySelectorAll(".cell");
@@ -143,10 +132,14 @@ const DisplayController = (function () {
     const init = () => {
         renderBoard();
         setupCellListeners();
+        message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
+
+        resetButton.addEventListener("click", () => {
+            GameController.startGame();
+            renderBoard();
+            message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
+        });
     };
 
-    return { init };
+    init();
 })();
-
-GameController.startGame();
-DisplayController.init();
