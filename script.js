@@ -1,15 +1,28 @@
 const Gameboard = (function () {
     const board = [];
-    function initializeBoard() {};
-    function updateCell() {};
-    function getCell() {};
-    function resetBoard() {};
+    
+    const init = () => {
+        board = Array(9).fill(null);
+    };
+
+    const getCell = (index) => {
+        return board[index];
+    };
+
+    const setCell = (index, marker) => {
+        board[index] = marker;
+    };
+
+    const reset = () => {
+        init();
+    };
+
+    init();
     
     return {
-        initializeBoard,
-        updateCell,
         getCell,
-        resetBoard
+        setCell,
+        reset
     };
 })();
 
