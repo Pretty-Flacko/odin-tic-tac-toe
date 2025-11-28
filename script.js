@@ -26,15 +26,22 @@ const Gameboard = (function () {
     };
 })();
 
-function Player(marker, name) {
-    const getMarker = () => marker;
-    const getName = () => name;
+const Player = (name, marker) => {
+    const playerName = name;
+    const playerMarker = marker;
+
+    const getName = () => playerName;
+    const getMarker = () => playerMarker;
+
+    const makeMove = (index) => {
+        console.log(`${playerName} tries to mark cell ${index} with ${playerMarker}`);
+    };
 
     return {
-        getMarker,
         getName,
+        getMarker,
     };
-}
+};
 
 const GameController = (function () {
     let currentPlayer;
