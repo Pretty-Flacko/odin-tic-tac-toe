@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.board-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.cell {
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    line-height: 100px;
+    font-size: 5rem;
+}

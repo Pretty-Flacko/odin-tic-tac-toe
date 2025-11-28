@@ -110,10 +110,15 @@ const GameController = (function () {
 })();
 
 const DisplayController = (function () {
-    const cells = document.querySelectorAll(".cells");
+    const cells = document.querySelectorAll(".cell");
     const resetButton = document.getElementById("reset-button");
 
-    const renderBoard = () => {};
+    const renderBoard = () => {
+        cells.forEach((cell, index) => {
+            const marker = Gameboard.getCell(index);
+            cell.textContent = marker ?? "";
+        });
+    };
     const init = () => {
         renderBoard();
     };
@@ -123,3 +128,5 @@ const DisplayController = (function () {
         renderBoard
     };
 })();
+
+DisplayController.renderBoard();
