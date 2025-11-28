@@ -43,8 +43,8 @@ const GameController = (function () {
     let currentPlayer;
     let players = [];
 
-    const startGame = () => {
-        players = [Player("Player 1", "X"), Player("Player 2", "O")];
+    const startGame = (name1 = "Player 1", name2 = "Player 2") => {
+        players = [Player(name1, "X"), Player(name2, "O")];
         currentPlayer = players[0];
         Gameboard.reset();
     };
@@ -103,6 +103,18 @@ const DisplayController = (function () {
     const cells = document.querySelectorAll(".cell");
     const message = document.getElementById("message");
     const resetButton = document.getElementById("reset-button");
+    const startButton = document.getElementById("start-button");
+    const player1Input = document.getElementById("player1-name");
+    const player2Input = document.getElementById("player2-name");
+
+    startButton.addEventListener("click", () => {
+        const name1 = player1Input.value || "Player 1";
+        const name2 = player2Input.value || "Player 2";
+        GameController.startGame(name1, name2);
+        renderBoard();
+        message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
+
+    });
 
     const renderBoard = () => {
         cells.forEach((cell, index) => {
