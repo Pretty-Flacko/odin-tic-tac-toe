@@ -111,6 +111,7 @@ const GameController = (function () {
 
 const DisplayController = (function () {
     const cells = document.querySelectorAll(".cell");
+    const message = document.getElementById("message");
     const resetButton = document.getElementById("reset-button");
 
     const renderBoard = () => {
@@ -119,14 +120,33 @@ const DisplayController = (function () {
             cell.textContent = marker ?? "";
         });
     };
+    
+    const setupCellListeners = () => {
+        cells.forEach((cell, index) => {
+            cell.addEventListener("click", () => {
+                if (Gameboard.getCell(index) || GameController.checkWinner()) return;
+                GameController.playRound(index);
+                renderBoard();
+
+                const winner = GameController.checkWinner();
+                if (winner) {
+                    message.textContent =
+                        winner === "tie" ? "It's a tie" : `${winner.getName()} wins!`;
+                } else {
+                    GameController.switchPlayer();
+                    message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
+                }
+            });
+        });
+    };
+
     const init = () => {
         renderBoard();
+        setupCellListeners();
     };
 
-    return {
-        init,
-        renderBoard
-    };
+    return { init };
 })();
 
-DisplayController.renderBoard();
+GameController.startGame();
+DisplayController.init();
