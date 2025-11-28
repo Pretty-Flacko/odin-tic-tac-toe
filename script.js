@@ -97,8 +97,6 @@ const GameController = (function () {
     };
 })();
 
-GameController.startGame();
-
 const DisplayController = (function () {
     const cells = document.querySelectorAll(".cell");
     const message = document.getElementById("message");
@@ -110,6 +108,7 @@ const DisplayController = (function () {
     startButton.addEventListener("click", () => {
         const name1 = player1Input.value || "Player 1";
         const name2 = player2Input.value || "Player 2";
+        cells.forEach(cell => cell.style.backgroundColor = "white");
         GameController.startGame(name1, name2);
         renderBoard();
         message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
@@ -145,7 +144,6 @@ const DisplayController = (function () {
     const init = () => {
         renderBoard();
         setupCellListeners();
-        message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
 
         resetButton.addEventListener("click", () => {
             GameController.startGame();
