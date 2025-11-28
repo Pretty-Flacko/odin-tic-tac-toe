@@ -108,3 +108,18 @@ const GameController = (function () {
         getCurrentPlayer
     };
 })();
+
+const DisplayController = (function () {
+    const cells = document.querySelectorAll(".cells");
+    const resetButton = document.getElementById("reset-button");
+
+    const renderBoard = () => {};
+    const init = () => {
+        renderBoard();
+    };
+
+    return {
+        init,
+        renderBoard
+    };
+})();
