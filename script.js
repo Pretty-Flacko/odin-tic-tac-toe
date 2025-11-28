@@ -44,7 +44,7 @@ const GameController = (function () {
     let players = [];
 
     const startGame = () => {
-        players = [Player("Player 1", "X"), Player("Player 2", "0")];
+        players = [Player("Player 1", "X"), Player("Player 2", "O")];
         currentPlayer = players[0];
         Gameboard.reset();
     };
@@ -83,6 +83,7 @@ const GameController = (function () {
         })();
         
         if (boardFull) return "tie";
+        return null;
     };
 
     const getCurrentPlayer = () => currentPlayer;
@@ -113,7 +114,7 @@ const DisplayController = (function () {
     const setupCellListeners = () => {
         cells.forEach((cell, index) => {
             cell.addEventListener("click", () => {
-                if (Gameboard.getCell(index) || GameController.checkWinner()) return;
+                if (Gameboard.getCell(index)) return;
                 GameController.playRound(index);
                 renderBoard();
 
