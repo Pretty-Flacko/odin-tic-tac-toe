@@ -100,20 +100,10 @@ const GameController = (function () {
 const DisplayController = (function () {
     const cells = document.querySelectorAll(".cell");
     const message = document.getElementById("message");
-    const resetButton = document.getElementById("reset-button");
     const startButton = document.getElementById("start-button");
+    const resetButton = document.getElementById("reset-button");
     const player1Input = document.getElementById("player1-name");
     const player2Input = document.getElementById("player2-name");
-
-    startButton.addEventListener("click", () => {
-        const name1 = player1Input.value || "Player 1";
-        const name2 = player2Input.value || "Player 2";
-        cells.forEach(cell => cell.style.backgroundColor = "white");
-        GameController.startGame(name1, name2);
-        renderBoard();
-        message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
-
-    });
 
     const renderBoard = () => {
         cells.forEach((cell, index) => {
@@ -121,35 +111,59 @@ const DisplayController = (function () {
             cell.textContent = marker ?? "";
         });
     };
+
+    const updateMessage = () => {
+        const winner = GameController.checkWinner();
+
+        if (winner) {
+            message.textContent =
+                winner === "tie" ? "It's a tie" : `${winner.getName()} wins!`;
+        } else {
+            message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
+        }
+    };
     
     const setupCellListeners = () => {
         cells.forEach((cell, index) => {
             cell.addEventListener("click", () => {
-                if (Gameboard.getCell(index)) return;
+                if (Gameboard.getCell(index) || GameController.checkWinner()) return;
+                
                 GameController.playRound(index);
                 renderBoard();
 
                 const winner = GameController.checkWinner();
-                if (winner) {
-                    message.textContent =
-                        winner === "tie" ? "It's a tie" : `${winner.getName()} wins!`;
-                } else {
+                if (!winner) {
                     GameController.switchPlayer();
-                    message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
                 }
+                updateMessage();
             });
+        });
+    };
+
+    const setupStartButton = () => {
+        startButton.addEventListener("click", () => {
+            const name1 = player1Input.value || "Player 1";
+            const name2 = player2Input.value || "Player 2";
+
+            GameController.startGame(name1, name2);
+            renderBoard();
+            updateMessage();
+        });
+    };
+
+    const setupResetButton = () => {
+        resetButton.addEventListener("click", () => {
+            GameController.startGame();
+            renderBoard();
+            updateMessage();
         });
     };
 
     const init = () => {
         renderBoard();
         setupCellListeners();
-
-        resetButton.addEventListener("click", () => {
-            GameController.startGame();
-            renderBoard();
-            message.textContent = `${GameController.getCurrentPlayer().getName()}'s turn`;
-        });
+        setupStartButton();
+        setupResetButton();
     };
 
     init();
