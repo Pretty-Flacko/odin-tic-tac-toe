@@ -42,6 +42,11 @@ const Player = (name, marker) => {
 const GameController = (function () {
     let currentPlayer;
     let players = [];
+    const winningCombos = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  // rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  //columns
+        [0, 4, 8], [2, 4, 6]              // diagonals
+    ];
 
     const startGame = (name1 = "Player 1", name2 = "Player 2") => {
         players = [Player(name1, "X"), Player(name2, "O")];
@@ -58,12 +63,6 @@ const GameController = (function () {
     };
 
     const checkWinner = () => {
-        const winningCombos = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],  // rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],  //columns
-            [0, 4, 8], [2, 4, 6]              // diagonals
-        ];
-
         for (const combo of winningCombos) {
             const [a, b, c] = combo;
             if (
