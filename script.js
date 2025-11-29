@@ -142,7 +142,10 @@ const DisplayController = (function () {
                 if (!winner) {
                     GameController.switchPlayer();
                 } else {
-                    cells.forEach((cell) => {cell.style.backgroundColor = "lightgrey";});
+                    cells.forEach((cell) => {
+                        cell.style.backgroundColor = "grey";
+                        cell.style.cursor = "not-allowed";
+                    });
                 }
                 updateMessage();
             });
@@ -156,7 +159,10 @@ const DisplayController = (function () {
             gameStarted = true;
 
             GameController.startGame(name1, name2);
-            cells.forEach((cell) => {cell.style.backgroundColor = "white";});
+            cells.forEach((cell) => {
+                cell.style.backgroundColor = "#e0e0e0";
+                cell.style.cursor = "pointer";
+            });
             startButton.disabled = true;
             resetButton.disabled = false;
             player1Input.disabled = true;
@@ -172,7 +178,10 @@ const DisplayController = (function () {
             Gameboard.reset();
             gameStarted = false;
 
-            cells.forEach((cell) => {cell.style.backgroundColor = "lightgrey";});
+            cells.forEach((cell) => {
+                cell.style.backgroundColor = "grey";
+                cell.style.cursor = "not-allowed";
+            });
             startButton.disabled = false;
             resetButton.disabled = true;
             player1Input.disabled = false;
