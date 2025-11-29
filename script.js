@@ -104,6 +104,7 @@ const DisplayController = (function () {
     const resetButton = document.getElementById("reset-button");
     const player1Input = document.getElementById("player1-name");
     const player2Input = document.getElementById("player2-name");
+    let gameStarted = false;
 
     const renderBoard = () => {
         cells.forEach((cell, index) => {
@@ -113,6 +114,11 @@ const DisplayController = (function () {
     };
 
     const updateMessage = () => {
+        if (!gameStarted) {
+            message.textContent = 'Click "Start Game"';
+            return;
+        }
+
         const winner = GameController.checkWinner();
 
         if (winner) {
@@ -126,7 +132,9 @@ const DisplayController = (function () {
     const setupCellListeners = () => {
         cells.forEach((cell, index) => {
             cell.addEventListener("click", () => {
-                if (Gameboard.getCell(index) || GameController.checkWinner()) return;
+                if (!gameStarted ||
+                    Gameboard.getCell(index) ||
+                    GameController.checkWinner()) return;
                 
                 GameController.playRound(index);
                 renderBoard();
@@ -134,6 +142,8 @@ const DisplayController = (function () {
                 const winner = GameController.checkWinner();
                 if (!winner) {
                     GameController.switchPlayer();
+                } else {
+                    cells.forEach((cell) => {cell.style.backgroundColor = "lightgrey";});
                 }
                 updateMessage();
             });
@@ -144,8 +154,15 @@ const DisplayController = (function () {
         startButton.addEventListener("click", () => {
             const name1 = player1Input.value || "Player 1";
             const name2 = player2Input.value || "Player 2";
+            gameStarted = true;
 
             GameController.startGame(name1, name2);
+            cells.forEach((cell) => {cell.style.backgroundColor = "white";});
+            startButton.disabled = true;
+            resetButton.disabled = false;
+            player1Input.disabled = true;
+            player2Input.disabled = true;
+            
             renderBoard();
             updateMessage();
         });
@@ -153,13 +170,24 @@ const DisplayController = (function () {
 
     const setupResetButton = () => {
         resetButton.addEventListener("click", () => {
-            GameController.startGame();
+            Gameboard.reset();
+            gameStarted = false;
+
+            cells.forEach((cell) => {cell.style.backgroundColor = "lightgrey";});
+            startButton.disabled = false;
+            resetButton.disabled = true;
+            player1Input.disabled = false;
+            player1Input.value = "";
+            player2Input.disabled = false;
+            player2Input.value = "";
+            
             renderBoard();
             updateMessage();
         });
     };
 
     const init = () => {
+        resetButton.disabled = true;
         renderBoard();
         setupCellListeners();
         setupStartButton();
